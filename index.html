@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Urban Decay BFCM Leaderboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --pink-50:#F6F2FF;--pink-100:#E8E0FB;--pink-300:#D2C6F6;--pink-500:#7C5CD6;
+  --gold:#B9A4F2;--gold-deep:#5B3FA6;--ink:#0B0B0F;--text:#4A4560;--white:#fff;--radius:22px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:90px}
+body{font-family:'Poppins',system-ui,sans-serif;background:var(--pink-50);color:var(--text);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
+#confetti,#snow{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999}
+#snow{z-index:1;opacity:.9}
+main,header,footer,.timerbar,.ticker{position:relative;z-index:2}
+
+/* sticky timer */
+.timerbar{position:sticky;top:0;z-index:50;background:var(--ink);color:var(--pink-50);box-shadow:0 6px 20px rgba(0,0,0,.18)}
+.timerbar .in{display:flex;align-items:center;justify-content:center;gap:18px;padding:10px 20px;flex-wrap:wrap}
+.tlabel{font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+.tboxes{display:flex;gap:8px}
+.tb{background:linear-gradient(160deg,#2a2a2a,#181818);border:1px solid rgba(167,139,250,.55);border-radius:10px;padding:4px 10px;min-width:58px;text-align:center}
+.tb b{display:block;font-size:20px;font-weight:800;line-height:1.15;color:var(--pink-50);font-variant-numeric:tabular-nums}
+.tb small{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold)}
+.tb.tick b{animation:tick .35s}
+@keyframes tick{0%{transform:translateY(-6px);opacity:.3}100%{transform:none;opacity:1}}
+
+.ticker{background:var(--pink-300);color:var(--ink);font-size:12px;font-weight:600;overflow:hidden;white-space:nowrap}
+.ticker div{display:inline-block;padding:9px 0;animation:slide 30s linear infinite}
+.ticker span{margin:0 28px}
+@keyframes slide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+header{background:var(--ink);border-bottom:1px solid rgba(167,139,250,.35)}
+.head{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:12px;flex-wrap:wrap}
+.logo{display:inline-block;text-decoration:none;line-height:0;cursor:pointer;transition:transform .25s}
+.logo:hover{transform:scale(1.06) rotate(-1.5deg)}
+.logo img{height:46px;width:auto;display:block}
+.wm{font-weight:700;letter-spacing:.42em;font-size:15px;color:#fff;margin-left:14px;white-space:nowrap}
+.band{background:linear-gradient(90deg,#D2C6F6,#DCE4FF);color:var(--ink);font-size:11px;font-weight:600;letter-spacing:.3em;text-transform:uppercase;padding:11px 20px;text-align:center}
+.band i{font-style:normal;margin:0 14px;opacity:.5}
+.logo{display:inline-flex;align-items:center}
+.head-r{font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--pink-300);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.live{display:inline-flex;align-items:center;gap:6px;color:var(--pink-300)}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--pink-300);animation:pulse 1.6s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(124,92,214,.6)}100%{box-shadow:0 0 0 10px rgba(124,92,214,0)}}
+.navlinks{display:flex;gap:6px;flex-wrap:wrap}
+.navlinks a{text-decoration:none;padding:6px 12px;border-radius:999px;transition:.2s}
+.navlinks a:hover{background:var(--pink-300);color:var(--ink)}
+
+.hero{position:relative;padding:60px 0 44px;overflow:hidden}
+.hero::before{content:"BFCM";position:absolute;right:-20px;top:10px;font-weight:800;font-size:200px;letter-spacing:.04em;color:rgba(124,92,214,.1);pointer-events:none;white-space:nowrap}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold-deep);padding-bottom:6px;border-bottom:2px solid var(--gold)}
+h1{font-size:clamp(36px,6vw,64px);line-height:1.08;font-weight:800;color:var(--ink);margin:22px 0 16px;letter-spacing:-.02em;position:relative}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--gold-deep),var(--gold) 40%,var(--pink-500));-webkit-background-clip:text;background-clip:text;color:transparent}
+h1 .bounce{display:inline-block;animation:bob 2.2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0) rotate(-4deg)}50%{transform:translateY(-8px) rotate(6deg)}}
+.lede{max-width:620px;font-size:17px;position:relative}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin:26px 0 22px;position:relative}
+.chip{font:600 13px 'Poppins',sans-serif;padding:9px 18px;border-radius:999px;border:1.5px solid var(--ink);color:var(--ink);background:transparent;cursor:pointer;transition:.2s}
+.chip:hover{transform:translateY(-3px) rotate(-1deg);box-shadow:0 8px 18px rgba(19,19,19,.15)}
+.chip.solid{background:var(--ink);color:var(--pink-50)}
+.chip.gold{border-color:var(--gold);color:var(--gold-deep);background:rgba(167,139,250,.14)}
+.btn{display:inline-flex;align-items:center;gap:8px;font:700 14px 'Poppins',sans-serif;padding:13px 24px;border-radius:999px;border:0;background:linear-gradient(90deg,var(--gold-deep),var(--gold));color:var(--ink);cursor:pointer;text-decoration:none;transition:.2s;box-shadow:0 8px 20px rgba(167,139,250,.45)}
+.btn:hover{transform:translateY(-3px) scale(1.03)}
+.btn.ghost{background:transparent;border:1.5px solid var(--ink);box-shadow:none;color:var(--ink)}
+.btns{display:flex;gap:12px;flex-wrap:wrap;position:relative}
+
+section{padding:40px 0}
+h2{font-size:clamp(26px,4vw,38px);font-weight:800;color:var(--ink);letter-spacing:-.01em}
+h2 + p{margin-top:6px;max-width:640px}
+.divider{text-align:center;color:var(--gold);letter-spacing:.7em;font-size:12px;padding:6px 0}
+
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat{background:var(--white);border-radius:var(--radius);padding:20px;border:1px solid rgba(167,139,250,.4);transition:.25s}
+.stat:hover{transform:translateY(-4px);box-shadow:0 12px 26px rgba(167,139,250,.3)}
+.stat b{display:block;font-size:30px;font-weight:800;color:var(--ink);line-height:1.1}
+.stat span{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+
+/* checklist */
+.check{margin-top:14px;display:grid;gap:8px}
+.check label{display:flex;gap:12px;align-items:center;background:var(--white);border:1.5px solid var(--pink-100);border-radius:14px;padding:12px 16px;cursor:pointer;font-weight:500;transition:.2s}
+.check label:hover{border-color:var(--gold)}
+.check input{accent-color:var(--pink-500);width:20px;height:20px}
+.check label.ok{background:rgba(167,139,250,.18);border-color:var(--gold);color:var(--ink)}
+.cmsg{margin-top:10px;font-weight:700;color:var(--gold-deep);min-height:24px}
+
+/* rules */
+.rules{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-top:22px}
+.rule{display:flex;gap:16px;align-items:center;background:var(--ink);color:var(--pink-50);border-radius:var(--radius);padding:22px;transition:.25s}
+.rule:hover{transform:rotate(-1deg) scale(1.02)}
+.rule .n{flex:0 0 46px;height:46px;border-radius:50%;background:var(--gold);color:var(--ink);font-weight:800;display:grid;place-items:center;font-size:18px}
+.rule b{display:block;color:var(--gold);font-size:12px;letter-spacing:.14em;text-transform:uppercase}
+
+/* tabs + panels */
+.tabs{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0 18px}
+.tab{font:600 14px 'Poppins',sans-serif;padding:11px 22px;border-radius:999px;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;transition:.2s}
+.tab:hover{background:var(--pink-100);transform:translateY(-2px)}
+.tab.on{background:var(--ink);color:var(--pink-50)}
+.finder{display:flex;gap:10px;align-items:center;margin-bottom:18px;flex-wrap:wrap}
+.finder input,.calc input,.calc select{font:500 15px 'Poppins',sans-serif;padding:12px 18px;border-radius:999px;border:1.5px solid var(--gold);background:var(--white);color:var(--ink);outline:none;min-width:230px}
+.finder input:focus,.calc input:focus,.calc select:focus{box-shadow:0 0 0 4px rgba(124,92,214,.2)}
+.fmsg{font-size:14px;font-weight:600;color:var(--gold-deep)}
+.panel{display:none}.panel.on{display:block;animation:fade .35s}
+.podium{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:26px}
+.podium.n1{grid-template-columns:minmax(0,440px)}
+.pc .sub{display:block;font-size:12px;color:var(--text);margin-top:8px}
+.pc.r1::after{content:"🖤"}
+.pc{position:relative;background:var(--white);border-radius:var(--radius);padding:24px 22px;border:1.5px solid rgba(167,139,250,.45);overflow:hidden;cursor:pointer;transition:.28s}
+.pc:hover{transform:translateY(-6px) rotate(-.8deg);box-shadow:0 18px 36px rgba(167,139,250,.35)}
+.pc.r1{background:linear-gradient(160deg,#fff,var(--pink-100));border-color:var(--gold);box-shadow:0 14px 36px rgba(167,139,250,.28)}
+.pc.r1::after{content:"🖤";position:absolute;right:16px;top:12px;font-size:26px;animation:bob 2.4s ease-in-out infinite}
+.medal{display:inline-grid;place-items:center;width:36px;height:36px;border-radius:50%;font-weight:800;font-size:14px;color:var(--ink);background:var(--gold)}
+.r2 .medal{background:#D9D9DE}.r3 .medal{background:#E2B38C}
+.pc .rank{font-size:12px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep);margin-left:10px}
+.prize{font-size:34px;font-weight:800;color:var(--ink);margin:14px 0 2px;line-height:1.1}
+.prize small{font-size:13px;font-weight:600;color:var(--pink-500);display:block;margin-top:4px;letter-spacing:.04em}
+.qual{margin-top:14px;padding-top:14px;border-top:1px dashed var(--gold);font-size:13px}
+.qual b{color:var(--ink)}
+.holder{margin-top:12px;font-weight:700;color:var(--ink);font-size:15px}
+.holder.empty{color:var(--text);font-weight:500;font-style:italic}
+.tbl{background:var(--white);border-radius:var(--radius);border:1px solid rgba(167,139,250,.4);overflow:hidden}
+.tbl-h,.row{display:grid;grid-template-columns:70px 1fr 210px 170px;gap:10px;align-items:center;padding:14px 22px}
+.tbl-h{background:var(--ink);color:var(--gold);font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+.row{border-top:1px solid var(--pink-100);font-size:15px;transition:.2s}
+.row:hover{background:var(--pink-50)}
+.row.hit{background:rgba(167,139,250,.28);animation:flash 1s 3}
+@keyframes flash{50%{background:rgba(124,92,214,.25)}}
+.row .rk{font-weight:800;color:var(--ink)}.row .hd{font-weight:600;color:var(--ink)}.row .vl{font-weight:700;color:var(--ink)}
+.tag{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:999px}
+.tag.ok{background:var(--gold);color:var(--ink)}.tag.no{background:var(--pink-100);color:var(--text)}
+.empty-row{padding:36px 22px;text-align:center;border-top:1px solid var(--pink-100)}
+.empty-row b{display:block;color:var(--ink);font-size:17px}
+.note{margin-top:22px;background:rgba(167,139,250,.14);border:1px dashed var(--gold);border-radius:16px;padding:16px 20px;font-size:14px}
+.note b{color:var(--ink)}
+
+/* calculator */
+.calc{margin-top:22px;background:var(--ink);color:var(--pink-50);border-radius:28px;padding:28px}
+.calc h3{font-size:22px;color:var(--gold);margin-bottom:6px}
+.calc .ctrl{display:flex;gap:12px;flex-wrap:wrap;margin:16px 0}
+.calc input,.calc select{background:var(--pink-50)}
+.calc{background:linear-gradient(150deg,#0B0B0F,#1d1536)}
+#cGmvWrap{display:none}
+.cres{background:rgba(255,255,255,.07);border:1px dashed var(--gold);border-radius:18px;padding:18px;font-size:16px;min-height:70px}
+.cres b{color:var(--gold)}
+.meter{height:10px;background:rgba(255,255,255,.15);border-radius:10px;margin-top:12px;overflow:hidden}
+.meter div{height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--pink-500));transition:width .6s}
+
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:22px}
+.tier{background:var(--white);border-radius:var(--radius);padding:22px;border:1px solid rgba(167,139,250,.4);transition:.25s}
+.tier:hover{transform:translateY(-5px);box-shadow:0 14px 30px rgba(167,139,250,.3)}
+.tier h3{font-size:14px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:12px}
+.tier ul{list-style:none}
+.tier li{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-top:1px solid var(--pink-100);font-size:14px}
+.tier li:first-child{border-top:0}.tier li b{color:var(--ink)}
+
+footer{margin-top:30px;background:var(--ink);color:var(--pink-100);text-align:center;padding:40px 20px}
+footer .logo img{height:40px;margin:0 auto 10px}
+footer p{font-size:13px;opacity:.85}
+
+
+/* tour */
+#tourDim{position:fixed;left:0;top:0;z-index:1000;border-radius:18px;pointer-events:none;box-shadow:0 0 0 9999px rgba(19,19,19,.68),0 0 0 3px var(--gold);will-change:transform,width,height;display:none}
+#tourDim.center{box-shadow:0 0 0 9999px rgba(19,19,19,.68)}
+#tourBlock{position:fixed;inset:0;z-index:999;display:none}
+#tourPop{position:fixed;left:0;top:0;z-index:1001;width:340px;max-width:calc(100vw - 24px);background:var(--white);border:2px solid var(--gold);border-radius:22px;padding:20px 20px 16px;box-shadow:0 20px 50px rgba(0,0,0,.35);display:none;opacity:0;transition:opacity .18s;will-change:transform}
+#tourPop h4{font-size:19px;color:var(--ink);font-weight:800;margin-bottom:6px;line-height:1.25}
+#tourPop p{font-size:14px;color:var(--text)}
+.tdots{display:flex;gap:5px;margin:14px 0 12px}
+.tdots i{height:5px;flex:1;border-radius:5px;background:var(--pink-100);transition:.3s}
+.tdots i.on{background:linear-gradient(90deg,var(--gold),var(--pink-500))}
+.tbtns{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.tskip{background:none;border:0;font:600 13px 'Poppins',sans-serif;color:var(--text);cursor:pointer;text-decoration:underline;padding:8px 4px}
+.tskip:hover{color:var(--pink-500)}
+.tbtns .btn{padding:10px 20px;font-size:13px}
+.tbtns .back{padding:10px 16px}
+.tcount{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-deep);margin-bottom:6px}
+@media(max-width:820px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .podium,.tiers,.rules,.sbody.on{grid-template-columns:1fr}
+  .hero::before{font-size:100px}
+  .tbl-h,.row{grid-template-columns:44px 1fr 120px;padding:12px 14px}
+  .podium.n1{grid-template-columns:1fr}
+  .tbl-h span:nth-child(4),.row .st{display:none}
+  .tb{min-width:50px;padding:3px 7px}.tb b{font-size:17px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="snow"></canvas>
+<canvas id="confetti"></canvas>
+
+<!-- STICKY TICKING TIMER -->
+<div class="timerbar"><div class="in">
+  <span class="tlabel" id="tlabel">Challenge ends in</span>
+  <div class="tboxes">
+    <div class="tb" id="tb-d"><b>--</b><small>Days</small></div>
+    <div class="tb" id="tb-h"><b>--</b><small>Hours</small></div>
+    <div class="tb" id="tb-m"><b>--</b><small>Mins</small></div>
+    <div class="tb" id="tb-s"><b>--</b><small>Secs</small></div>
+  </div>
+</div></div>
+
+<div class="ticker"><div><span>🖤 UD BFCM Creator Challenge is LIVE</span><span>Nov 1 to Nov 30</span><span>$10,000 prize pool</span><span>Ghost the rest. Wear Urban Decay.</span><span>🖤 UD BFCM Creator Challenge is LIVE</span><span>Nov 1 to Nov 30</span><span>$10,000 prize pool</span><span>Ghost the rest. Wear Urban Decay.</span></div></div>
+
+<header>
+  <div class="wrap head">
+    <a class="logo" href="#top" id="logo"><img src="https://static.wixstatic.com/media/ad4cd1_f68908b038c24e4b92798b7999ad48a9~mv2.png" alt="Urban Decay"><span class="wm">URBAN DECAY</span></a>
+    <div class="head-r">
+      <nav class="navlinks"><a href="#" id="replay">Take the tour</a><a href="#board">Leaderboard</a><a href="#rewards">Prizes</a></nav>
+      <span class="live"><i></i>Live</span>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<div class="band"><span>Urban Decay</span><i>|</i><span>Black Friday Cyber Monday</span></div>
+<div class="hero">
+  <div class="wrap">
+    <span class="eyebrow">UD BFCM Creator Challenge · Nov 1 to Nov 30</span>
+    <h1>Ghost the rest. <em>Own</em> Black Friday Cyber Monday <span class="bounce">🖤</span></h1>
+    <p class="lede">Welcome to the Urban Decay BFCM leaderboard. Post any Urban Decay product, drive the GMV and watch your name climb. Three categories, five winners, one $10,000 prize pool.</p>
+    <div class="chips">
+      <button class="chip solid" data-pop>$10,000 prize pool 💸</button>
+      <button class="chip" data-pop>5 winners · 3 categories</button>
+      <button class="chip gold" data-pop>Any Urban Decay product 💜</button>
+    </div>
+    <div class="btns">
+      <button class="btn" id="tourBtn">Show me how to play 🖤</button>
+      <button class="btn ghost" id="popBtn">Pop the confetti 🎉</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="divider">✦ ✦ ✦ ✦ ✦</div>
+
+  <section>
+    <div class="stats">
+      <div class="stat"><b id="s-gmv">$0</b><span>Total GMV counted</span></div>
+      <div class="stat"><b id="s-vid">0</b><span>Videos counted</span></div>
+      <div class="stat"><b>$10,000</b><span>Total prize pool</span></div>
+      <div class="stat"><b id="s-cr">0</b><span>Creators on board</span></div>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>The golden rules 🖤</h2>
+    <p>These apply to every video in every category. Miss them and the video will not count.</p>
+    <div class="rules">
+      <div class="rule"><div class="n">1</div><div><b>Both hashtags</b><span>Include #UDBFCM + #UrbanDecayPartner on every challenge video.</span></div></div>
+      <div class="rule"><div class="n">2</div><div><b>On-screen text</b><span>"#UrbanDecayPartner" must appear on screen as a text overlay in every video.</span></div></div>
+      <div class="rule"><div class="n">3</div><div><b>Active affiliate link</b><span>Your link must be active and linked to the Urban Decay TikTok Shop storefront.</span></div></div>
+      <div class="rule"><div class="n">4</div><div><b>Any UD product</b><span>Feature any Urban Decay product. GMV is tracked across the full Urban Decay shop.</span></div></div>
+    </div>
+    <h3 style="margin-top:26px;color:var(--ink)">Pre-post checklist (tick them all for a surprise)</h3>
+    <div class="check" id="check">
+      <label><input type="checkbox"> My video features an Urban Decay product with my active affiliate link</label>
+      <label><input type="checkbox"> I included #UDBFCM and #UrbanDecayPartner</label>
+      <label><input type="checkbox"> "#UrbanDecayPartner" shows on screen as a text overlay</label>
+      <label><input type="checkbox"> It is posted between Nov 1 and Nov 30</label>
+    </div>
+    <div class="cmsg" id="cmsg"></div>
+  </section>
+
+  <section id="board">
+    <h2>The leaderboard 🏆</h2>
+    <p>Pick a category. Tap a prize card for a little sparkle. Search your handle to find yourself fast.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab on" data-t="gmv">GMV Tier</button>
+      <button class="tab" data-t="vol">Video Volume</button>
+      <button class="tab" data-t="viral">Viral Wildcard</button>
+    </div>
+    <div class="finder">
+      <input id="find" type="search" placeholder="Find your @handle 🔍" autocomplete="off">
+      <span class="fmsg" id="fmsg"></span>
+    </div>
+    <div id="panels"></div>
+    <div class="note"><b>How ranking works:</b> you need to hit the qualification mark for a rank to claim that rank's prize. Video Volume and Viral Wildcard also need a minimum GMV. If the creator in a spot has not hit the marks yet, the spot stays open until they do.</div>
+  </section>
+
+
+  <section id="rewards">
+    <h2>The prizes 🏆</h2>
+    <p>$10,000 across five winners. Here is the full prize menu and every qualification mark in one place.</p>
+    <div class="tiers" id="tiers"></div>
+  </section>
+</div>
+</main>
+
+<footer>
+  <a class="logo" href="#top"><img src="https://static.wixstatic.com/media/ad4cd1_f68908b038c24e4b92798b7999ad48a9~mv2.png" alt="Urban Decay"></a>
+  <p>UD BFCM Creator Challenge · Nov 1 to Nov 30, 2026 · Standings update with each data refresh</p>
+  <p id="stamp"></p>
+</footer>
+
+<script>
+/* ============================================================
+   UPDATE THE STANDINGS HERE
+   One object per creator. Order does not matter, the page sorts it.
+   gmv  -> { handle:"@creator", value: 1250 }  (USD)
+   vol  -> { handle:"@creator", value: 7 }     (number of shoppable videos)
+   live -> { handle:"@creator", value: 410 }   (live GMV in USD)
+   ============================================================ */
+const DATA_AS_OF = "";   // e.g. "Nov 10, 2026". Leave blank to hide.
+const DATA = {
+  gmv:   [],   // { handle:"@creator", value: 3100 }                 value = total GMV in USD
+  vol:   [],   // { handle:"@creator", value: 18, gmv: 1400 }        value = videos posted, gmv = total GMV in USD
+  viral: []    // { handle:"@creator", value: 150000, gmv: 2600 }    value = views on best video, gmv = total GMV in USD
+};
+
+const CATS = {
+  gmv:   { name:"GMV Tier", sub:"Biggest Revenue Driver", unit:"GMV", kind:"money",
+           tiers:[{p:"$3,000",q:2750}], qLabel:v=>"$"+v.toLocaleString()+" GMV",
+           win:"Be #1 on GMV to take $3,000." },
+  vol:   { name:"Video Volume", sub:"Content Output", unit:"Videos · GMV", kind:"vol", minGmv:1250,
+           tiers:[{p:"$2,000",q:15},{p:"$1,250",q:15},{p:"$750",q:15}], qLabel:v=>v+"+ videos + $1,250 GMV",
+           win:"Finish in the top 3 on videos for $2,000, $1,250 or $750." },
+  viral: { name:"Viral Wildcard", sub:"Breakout Moment", unit:"Views · GMV", kind:"views", minGmv:2500,
+           tiers:[{p:"$3,000",q:100000}], qLabel:v=>v.toLocaleString()+"+ views + $2,500 GMV",
+           win:"Have the top video by views to take $3,000." }
+};
+const ORD=["1st","2nd","3rd"];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const usd=v=>"$"+Number(v).toLocaleString(undefined,{maximumFractionDigits:2});
+const disp=(c,r)=>c.kind==="money"?usd(r.value):c.kind==="vol"?`${Number(r.value).toLocaleString()} videos · ${usd(r.gmv||0)}`:`${Number(r.value).toLocaleString()} views · ${usd(r.gmv||0)}`;
+const meets=(c,t,r)=>r.value>=t.q&&(!c.minGmv||(r.gmv||0)>=c.minGmv);
+const sorted=k=>[...DATA[k]].sort((a,b)=>b.value-a.value);
+
+/* ---------- confetti ---------- */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cv=document.getElementById("confetti"),cx=cv.getContext("2d");
+let parts=[],running=false;
+function size(){cv.width=innerWidth;cv.height=innerHeight}
+addEventListener("resize",size);size();
+const COLORS=["#D2C6F6","#7C5CD6","#B9A4F2","#E8E0FB","#5B3FA6","#ffffff","#0B0B0F"];
+function burst(x,y,n=140,spread=1){
+  if(reduce)return;
+  for(let i=0;i<n;i++){
+    const a=Math.random()*Math.PI*2,sp=(4+Math.random()*9)*spread;
+    parts.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-6,g:.22+Math.random()*.12,
+      w:6+Math.random()*7,h:4+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,
+      c:COLORS[Math.random()*COLORS.length|0],life:0,max:150+Math.random()*100,heart:Math.random()<.12});
+  }
+  if(!running){running=true;requestAnimationFrame(loop)}
+}
+function loop(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts=parts.filter(p=>p.life<p.max&&p.y<cv.height+40);
+  for(const p of parts){
+    p.life++;p.vy+=p.g;p.vx*=.99;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+    cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.globalAlpha=Math.max(0,1-p.life/p.max);cx.fillStyle=p.c;
+    if(p.heart){cx.font="16px serif";cx.fillText("🖤",-8,8)}else cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+    cx.restore();
+  }
+  if(parts.length)requestAnimationFrame(loop);else{running=false;cx.clearRect(0,0,cv.width,cv.height)}
+}
+function bigShow(){
+  burst(innerWidth*.15,innerHeight*.9,120,1.2);
+  burst(innerWidth*.85,innerHeight*.9,120,1.2);
+  setTimeout(()=>burst(innerWidth*.5,innerHeight*.35,200,1.4),350);
+  setTimeout(()=>burst(innerWidth*.3,innerHeight*.25,110),800);
+  setTimeout(()=>burst(innerWidth*.7,innerHeight*.25,110),1000);
+}
+addEventListener("load",()=>setTimeout(bigShow,250));
+document.getElementById("popBtn").addEventListener("click",bigShow);
+document.getElementById("logo").addEventListener("click",e=>burst(e.clientX,e.clientY,90));
+document.querySelectorAll("[data-pop]").forEach(b=>b.addEventListener("click",e=>burst(e.clientX,e.clientY,90)));
+
+/* ---------- gentle snow ---------- */
+(function(){
+  if(reduce)return;
+  const c=document.getElementById("snow"),x=c.getContext("2d");
+  function rs(){c.width=innerWidth;c.height=innerHeight}rs();addEventListener("resize",rs);
+  const f=Array.from({length:36},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:1.5+Math.random()*3,s:.3+Math.random()*.8,d:Math.random()*Math.PI*2}));
+  (function t(){
+    if(window.tourOn||document.hidden){setTimeout(()=>requestAnimationFrame(t),250);return}
+    x.clearRect(0,0,c.width,c.height);x.fillStyle="rgba(124,92,214,.35)";
+    for(const p of f){p.y+=p.s;p.d+=.01;p.x+=Math.sin(p.d)*.5;if(p.y>c.height){p.y=-5;p.x=Math.random()*c.width}
+      x.beginPath();x.arc(p.x,p.y,p.r,0,7);x.fill()}
+    requestAnimationFrame(t);
+  })();
+})();
+
+/* ---------- ticking timer (Nov 1 to Nov 30, 2026) ---------- */
+(function(){
+  const start=new Date(2026,10,1,0,0,0), end=new Date(2026,10,30,23,59,59);
+  const lab=document.getElementById("tlabel");
+  const el={d:tb("d"),h:tb("h"),m:tb("m"),s:tb("s")};
+  function tb(k){const e=document.getElementById("tb-"+k);return{box:e,b:e.querySelector("b"),v:null}}
+  function set(o,v){const t=String(v).padStart(2,"0");if(o.v!==t){o.b.textContent=t;o.v=t;o.box.classList.add("tick");setTimeout(()=>o.box.classList.remove("tick"),400)}}
+  function upd(){
+    const now=new Date();let target,L;
+    if(now<start){target=start;L="Challenge starts in"}
+    else if(now<=end){target=end;L="Challenge ends in"}
+    else{lab.textContent="Challenge ended. Thank you, creators 🖤";["d","h","m","s"].forEach(k=>set(el[k],0));return}
+    lab.textContent=L;
+    let diff=Math.max(0,target-now);
+    const d=Math.floor(diff/864e5);diff%=864e5;
+    const h=Math.floor(diff/36e5);diff%=36e5;
+    const m=Math.floor(diff/6e4);diff%=6e4;
+    const s=Math.floor(diff/1e3);
+    set(el.d,d);set(el.h,h);set(el.m,m);set(el.s,s);
+  }
+  upd();setInterval(upd,1000);
+})();
+
+/* ---------- checklist ---------- */
+const chk=document.querySelectorAll("#check input");
+chk.forEach(c=>c.addEventListener("change",()=>{
+  c.parentElement.classList.toggle("ok",c.checked);
+  const n=[...chk].filter(x=>x.checked).length;
+  const m=document.getElementById("cmsg");
+  if(n===chk.length){m.textContent="Camera ready. Hit post! 🎉";bigShow()}
+  else m.textContent=n?`${n} of ${chk.length} done`:"";
+}));
+
+/* ---------- leaderboard ---------- */
+function renderPanel(k){
+  const c=CATS[k],list=sorted(k);
+  const pods=c.tiers.map((t,i)=>{
+    const who=list[i],hit=who&&meets(c,t,who);
+    const holder=who?`<div class="holder">${esc(who.handle)} · ${disp(c,who)}${hit?"":" (not yet qualified)"}</div>`
+      :`<div class="holder empty">This spot is open. Could be you! 🖤</div>`;
+    return `<div class="pc r${i+1}" data-pop2><span class="medal">${i+1}</span><span class="rank">${c.tiers.length>1?ORD[i]+" place":c.sub}</span>
+      <div class="prize">${t.p}<small>${c.name}</small></div>
+      <div class="qual">Qualification: <b>${c.qLabel(t.q)}</b></div>${holder}</div>`;
+  }).join("");
+  let rows;
+  if(!list.length)rows=`<div class="empty-row"><b>The board is warming up 🔥</b>First standings land with the next data refresh. Post your BFCM videos to get on it.</div>`;
+  else rows=list.map((r,i)=>{
+    const t=c.tiers[i],ok=t&&meets(c,t,r);
+    const st=t?(ok?`<span class="tag ok">${t.p} winner</span>`:`<span class="tag no">Needs ${c.qLabel(t.q)}</span>`):`<span class="tag no">Keep climbing</span>`;
+    return `<div class="row" data-h="${esc(r.handle.toLowerCase())}"><div class="rk">${i+1}</div><div class="hd">${esc(r.handle)}</div><div class="vl">${disp(c,r)}</div><div class="st">${st}</div></div>`;
+  }).join("");
+  return `<div class="panel" id="p-${k}"><div class="podium n${c.tiers.length}">${pods}</div>
+    <div class="tbl"><div class="tbl-h"><span>Rank</span><span>Creator</span><span>${c.unit}</span><span class="st">Prize status</span></div>${rows}</div></div>`;
+}
+document.getElementById("panels").innerHTML=Object.keys(CATS).map(renderPanel).join("");
+document.getElementById("p-gmv").classList.add("on");
+document.querySelectorAll("[data-pop2]").forEach(p=>p.addEventListener("click",e=>burst(e.clientX,e.clientY,80)));
+function setTab(k){
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("on",x.dataset.t===k));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("on",p.id==="p-"+k));
+  runFind();
+}
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",e=>{setTab(b.dataset.t);burst(e.clientX,e.clientY,45,.7)}));
+
+function runFind(){
+  const q=document.getElementById("find").value.trim().toLowerCase().replace(/^@/,"");
+  const msg=document.getElementById("fmsg");
+  document.querySelectorAll(".row").forEach(r=>r.classList.remove("hit"));
+  if(!q){msg.textContent="";return}
+  const rows=[...document.querySelectorAll(".panel.on .row")].filter(r=>r.dataset.h.replace(/^@/,"").includes(q));
+  if(rows.length){rows[0].classList.add("hit");rows[0].scrollIntoView({block:"center",behavior:"smooth"});msg.textContent="Found you! ✨"}
+  else msg.textContent=document.querySelectorAll(".panel.on .row").length?"Not on this board yet. Try another tab.":"The board is empty so far. Be the first!";
+}
+document.getElementById("find").addEventListener("input",runFind);
+
+/* ---------- rewards + stats ---------- */
+document.getElementById("tiers").innerHTML=Object.keys(CATS).map(k=>{
+  const c=CATS[k];
+  return `<div class="tier"><h3>${c.name}</h3><ul>${c.tiers.map((t,i)=>`<li><span>${c.tiers.length>1?ORD[i]:"Winner"} · <b>${t.p}</b></span><span>${c.qLabel(t.q)}</span></li>`).join("")}</ul></div>`;
+}).join("");
+const all=[...DATA.gmv,...DATA.vol,...DATA.viral];
+document.getElementById("s-gmv").textContent=usd(DATA.gmv.reduce((a,r)=>a+r.value,0));
+document.getElementById("s-vid").textContent=DATA.vol.reduce((a,r)=>a+r.value,0).toLocaleString();
+document.getElementById("s-cr").textContent=new Set(all.map(r=>r.handle.toLowerCase())).size;
+if(DATA_AS_OF)document.getElementById("stamp").textContent="Data through "+DATA_AS_OF;
+
+/* ---------- guided tour (auto-starts on load) ---------- */
+(function(){
+  const S=[
+    {t:"Welcome to the board 🖤",p:"Here is a quick tour of everything on this page. Hit Next to follow along or Skip if you already know the drill.",sel:null},
+    {t:"Your clock ⏰",p:"This ticks down to the end of the challenge on Nov 30. Anything you post before it hits zero counts.",sel:".timerbar",top:true},
+    {t:"The big prize 💸",p:"$10,000 across five winners and three categories. Any Urban Decay product counts.",sel:".chips"},
+    {t:"The golden rules 🌟",p:"Both hashtags, the on-screen text overlay and an active affiliate link on every video. Miss one and it will not count.",sel:"#rules .rules"},
+    {t:"Run this before you post ✅",p:"Tick every box on the checklist and you get a little surprise.",sel:"#check"},
+    {t:"Pick your category 🏆",p:"GMV Tier, Video Volume and Viral Wildcard are separate races with their own prizes. Tap a tab to switch boards.",sel:".tabs"},
+    {t:"Find yourself 🔍",p:"Type your @handle here and the page jumps straight to your row.",sel:".finder"},
+    {t:"The board 📊",p:"Prize cards sit on top and the full ranking sits below. A spot stays open until someone hits its qualification marks.",sel:"#panels",start:true},
+    {t:"The prize menu 🎁",p:"Every payout and qualification mark lives here. Come back any time.",sel:"#tiers"},
+    {t:"You are all set! 🎉",p:"Go post something smoldering. You can replay this tour any time from Take the tour at the top.",sel:null}
+  ];
+  const dim=document.createElement("div");dim.id="tourDim";
+  const blk=document.createElement("div");blk.id="tourBlock";
+  const pop=document.createElement("div");pop.id="tourPop";
+  document.body.append(blk,dim,pop);
+  const stop=e=>e.preventDefault();
+  blk.addEventListener("wheel",stop,{passive:false});blk.addEventListener("touchmove",stop,{passive:false});
+
+  let i=0,on=false,raf=0,last=0,cur=null,side="below",el=null,pw=340,ph=180,scrollAnim=null,swapT=0;
+  const ease=k=>k<.5?4*k*k*k:1-Math.pow(-2*k+2,3)/2;
+
+  function scrollToY(y){
+    const max=document.documentElement.scrollHeight-innerHeight;
+    y=Math.max(0,Math.min(max,y));
+    const from=scrollY,d=y-from;
+    if(Math.abs(d)<2){scrollAnim=null;return}
+    scrollAnim={from,d,t0:performance.now(),dur:Math.min(900,350+Math.abs(d)*.35)};
+  }
+  function stepScroll(now){
+    if(!scrollAnim)return;
+    const k=Math.min(1,(now-scrollAnim.t0)/scrollAnim.dur);
+    scrollTo({top:scrollAnim.from+scrollAnim.d*ease(k),behavior:"instant"});
+    if(k>=1)scrollAnim=null;
+  }
+  function targetFor(){
+    if(!el)return{x:innerWidth/2,y:innerHeight/2,w:0,h:0,px:Math.max(12,(innerWidth-pw)/2),py:Math.max(12,(innerHeight-ph)/2)};
+    const r=el.getBoundingClientRect(),pad=8;
+    let py;
+    if(side==="below")py=r.bottom+18;else if(side==="above")py=r.top-ph-18;else py=innerHeight-ph-14;
+    py=Math.max(10,Math.min(innerHeight-ph-10,py));
+    const px=Math.min(Math.max(12,r.left),innerWidth-pw-12);
+    return{x:r.left-pad,y:r.top-pad,w:r.width+pad*2,h:r.height+pad*2,px,py};
+  }
+  function frame(now){
+    if(!on)return;
+    const dt=Math.min(64,now-last||16);last=now;
+    stepScroll(now);
+    const g=targetFor();
+    if(!cur)cur={...g};
+    else{
+      const a=1-Math.exp(-dt/70);
+      for(const k in g)cur[k]+=(g[k]-cur[k])*a;
+    }
+    dim.style.transform=`translate3d(${cur.x}px,${cur.y}px,0)`;
+    dim.style.width=Math.max(0,cur.w)+"px";dim.style.height=Math.max(0,cur.h)+"px";
+    pop.style.transform=`translate3d(${cur.px}px,${cur.py}px,0)`;
+    raf=requestAnimationFrame(frame);
+  }
+  function chooseSide(){
+    if(!el){side="center";return}
+    const r=el.getBoundingClientRect();
+    /* where will the element sit once scrolling finishes? */
+    const dest=destY(),shift=scrollY-dest;
+    const top=r.top+shift,bottom=r.bottom+shift;
+    if(innerHeight-bottom>=ph+30)side="below";
+    else if(top>=ph+30)side="above";
+    else side="fixed";
+  }
+  function destY(){
+    if(!el)return 0;
+    const r=el.getBoundingClientRect(),abs=r.top+scrollY;
+    const s=S[i];
+    if(s.top)return 0;
+    if(s.start||r.height>innerHeight*.55)return abs-96;
+    return abs-(innerHeight-r.height)/2;
+  }
+  function end(finished){
+    on=false;window.tourOn=false;cancelAnimationFrame(raf);scrollAnim=null;cur=null;
+    dim.style.display=pop.style.display=blk.style.display="none";pop.style.opacity=0;
+    if(finished)bigShow();
+  }
+  function render(){
+    const s=S[i];
+    pop.innerHTML=`<div class="tcount">Step ${i+1} of ${S.length}</div><h4>${s.t}</h4><p>${s.p}</p>
+      <div class="tdots">${S.map((_,k)=>`<i class="${k<=i?"on":""}"></i>`).join("")}</div>
+      <div class="tbtns"><button class="tskip" id="tSkip">${i===S.length-1?"Close":"Skip tour"}</button>
+      <span style="display:flex;gap:8px">${i?'<button class="btn ghost back" id="tBack">Back</button>':""}<button class="btn" id="tNext">${i===S.length-1?"Let's go! 🎉":"Next →"}</button></span></div>`;
+    document.getElementById("tSkip").onclick=()=>end(false);
+    document.getElementById("tNext").onclick=()=>i===S.length-1?end(true):show(i+1);
+    const b=document.getElementById("tBack");if(b)b.onclick=()=>show(i-1);
+    ph=pop.offsetHeight;pw=pop.offsetWidth;
+    el=S[i].sel?document.querySelector(S[i].sel):null;
+    chooseSide();
+    dim.className=el?"":"center";
+    scrollToY(destY());
+    pop.style.opacity=1;
+  }
+  function show(n){
+    i=Math.max(0,Math.min(S.length-1,n));
+    clearTimeout(swapT);
+    pop.style.opacity=0;
+    swapT=setTimeout(render,cur?160:0);
+  }
+  function start(){
+    if(on)return;
+    on=true;window.tourOn=true;cur=null;last=performance.now();
+    blk.style.display="block";dim.style.display="block";pop.style.display="block";
+    show(0);raf=requestAnimationFrame(frame);
+  }
+  addEventListener("resize",()=>{if(on){ph=pop.offsetHeight;pw=pop.offsetWidth;chooseSide();scrollToY(destY())}});
+  addEventListener("keydown",e=>{if(!on)return;if(e.key==="Escape")end(false);if(e.key==="ArrowRight"){const n=document.getElementById("tNext");n&&n.click()}if(e.key==="ArrowLeft"&&i)show(i-1)});
+  ["replay","tourBtn"].forEach(id=>document.getElementById(id).addEventListener("click",e=>{e.preventDefault();start()}));
+  addEventListener("load",()=>setTimeout(start,1800));
+})();
+</script>
+</body>
+</html>
